@@ -12,12 +12,8 @@ inputs:
   github-token:
     description: 'A GitHub auth token to be able to create the pull request'
     required: true
-  base-branch:
-    description: 'The branch you are merging into'
-    required: true
-    default: master
   pom-path:
-    description: The relative location of your pom.xml file
+    description: 'The relative location of your pom.xml file'
     required: true
     default: '.'
   git-email:
@@ -36,5 +32,4 @@ runs:
     TOKEN: ${{ inputs.github-token }}
     EMAIL: ${{ inputs.git-email }}
     NAME: ${{ inputs.git-username }}
-    BRANCH: ${{ inputs.base-branch }}
     POMPATH: ${{ inputs.pom-path}}

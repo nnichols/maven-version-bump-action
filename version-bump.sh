@@ -34,28 +34,27 @@ export GITHUB_TOKEN=$TOKEN
 
 cd $POMPATH
 
-CURRENT_VERSION=$(cat pom.xml | grep "<version>.*</version>" | head -1 | awk -F'[><]' '{print $3}')
-BRANCH_COMMITS=$(git log $BRANCH.. --pretty='%B')
+OLD_VERSION=$(cat pom.xml | grep "<version>.*</version>" | head -1 | awk -F'[><]' '{print $3}')
 
-BUMP_MODE='none'
-if echo $BRANCH_COMMITS | grep '#major'
-then
-  BUMP_MODE='major'
-elif echo $BRANCH_COMMITS | grep '#minor'
-then
-  BUMP_MODE='minor'
-elif echo $BRANCH_COMMITS | grep '#patch'
-then
-  BUMP_MODE='patch'
+BUMP_MODE="none"
+if git log -1 | grep -q "#major"; then
+  BUMP_MODE="major"
+elif git log -1 | grep -q "#minor"; then
+  BUMP_MODE="minor"
+elif git log -1 | grep -q "#patch"; then
+  BUMP_MODE="patch"
 fi
 
-if [[ $BUMP_MODE -eq 'none' ]]
+if [[ "${BUMP_MODE}" == "none" ]]
 then
   echo "No matching commit tags found."
-  echo "pom.xml at" $POMPATH "will remain at" $CURRENT_VERSION
+  echo "pom.xml at" $POMPATH "will remain at" $OLD_VERSION
 else
   echo $BUMP_MODE "version bump detected"
-  bump $BUMP_MODE $CURRENT_VERSION
-  echo "pom.xml at" $POMPATH "will be bumped from" $CURRENT_VERSION "to" $NEW_VERSION
+  bump $BUMP_MODE $OLD_VERSION
+  echo "pom.xml at" $POMPATH "will be bumped from" $OLD_VERSION "to" $NEW_VERSION
   mvn versions:set -DnewVersion="${NEW_VERSION}"
+  git add pom.xml
+  git commit -m "Bump pom.xml from $OLD_VERSION to $NEW_VERSION"
+  git push -u "https://$GITHUB_ACTOR:$TOKEN@github.com/$GITHUB_REPOSITORY.git"
 fi
