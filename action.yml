@@ -1,0 +1,40 @@
+# ref: https://help.github.com/en/actions/building-actions/metadata-syntax-for-github-actions
+name: Maven Version Bump Action
+description: A simple GitHub Actions to bump the version of Maven projects
+
+author: Nick Nichols
+
+branding:
+  color: purple
+  icon: git-commit
+
+inputs:
+  github-token:
+    description: 'A GitHub auth token to be able to create the pull request'
+    required: true
+  base-branch:
+    description: 'The branch you are merging into'
+    required: true
+    default: master
+  pom-path:
+    description: The relative location of your pom.xml file
+    required: true
+    default: '.'
+  git-email:
+    description: 'The email address used to create the version bump commit with.'
+    required: true
+    default: 41898282+github-actions[bot]@users.noreply.github.com
+  git-username:
+    description: 'The name to use for the version bump commit. e.g. github.actor'
+    required: true
+    default: github-actions[bot]
+
+runs:
+  using: docker
+  image: Dockerfile
+  env:
+    TOKEN: ${{ inputs.github-token }}
+    EMAIL: ${{ inputs.git-email }}
+    NAME: ${{ inputs.git-username }}
+    BRANCH: ${{ inputs.base-branch }}
+    POMPATH: ${{ inputs.pom-path}}
