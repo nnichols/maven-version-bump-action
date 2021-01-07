@@ -25,7 +25,7 @@ jobs:
       uses: actions/checkout@v2
 
     - name: Bump Version
-      uses: nnichols/maven-version-bump-action@9e1608f3d2012ffe6397dc2e8bf74dd81c425b4c
+      uses: nnichols/maven-version-bump-action@v1
       with:
         github-token: ${{ secrets.github_token }}
 ```
