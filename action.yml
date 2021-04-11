@@ -18,12 +18,10 @@ inputs:
     default: '.'
   git-email:
     description: 'The email address used to create the version bump commit with.'
-    required: false
-    default: 41898282+github-actions[bot]@users.noreply.github.com
+    required: true
   git-username:
     description: 'The name to use for the version bump commit. e.g. github.actor'
-    required: false
-    default: github-actions[bot]
+    required: true
 
 outputs:
   version:
