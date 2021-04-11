@@ -28,7 +28,7 @@ inputs:
 outputs:
   version:
     description: 'The current version (whether updated or not)'
-    value: ${{ steps.bump-version.outputs.version }}
+    value: ${{ steps.get-outputs.outputs.version }}
 
 runs:
   using: "composite"
