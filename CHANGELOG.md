@@ -2,7 +2,8 @@
 
 ## v3 - 04/10/2021
 
-- Refactor to use composite action to give version output for subsequent steps
+- Add `version` output
+- Refactor to use composite type instead of Dockerfile
 
 ## v2 - 01/09/2021
 
