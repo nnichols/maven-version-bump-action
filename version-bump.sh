@@ -31,6 +31,10 @@ function bump {
     esac
 }
 
+echo "GITHUB_EMAIL: $GITHUB_EMAIL"
+echo "GITHUB_USER: $GITHUB_USER"
+echo "GITHUB_ACTOR: $GITHUB_ACTOR"
+echo "GITHUB_TOKEN: $GITHUB_TOKEN"
 git config --global user.email $GITHUB_EMAIL
 git config --global user.name $GITHUB_USER
 
