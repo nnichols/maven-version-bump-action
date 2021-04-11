@@ -43,6 +43,6 @@ runs:
     run: echo "::set-output name=version::$(${{github.action_path}}/version-bump.sh | tail -1)"
     shell: bash
   - name: output
-    run: "echo "Version is now ${{ steps.steps.bump-version.outputs.version }}
+    run: "echo "Version is now ${{ steps.steps.bump-version.outputs.version }}"
     shell: bash
 
