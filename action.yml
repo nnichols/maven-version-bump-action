@@ -18,11 +18,11 @@ inputs:
     default: '.'
   git-email:
     description: 'The email address used to create the version bump commit with.'
-    required: true
+    required: false
     default: 41898282+github-actions[bot]@users.noreply.github.com
   git-username:
     description: 'The name to use for the version bump commit. e.g. github.actor'
-    required: true
+    required: false
     default: github-actions[bot]
 
 outputs:
@@ -34,15 +34,20 @@ runs:
   using: "composite"
   steps:
     - name: Bump Version
-      id: bump-version
       env:
         TOKEN: ${{ inputs.github-token }}
         EMAIL: ${{ inputs.git-email }}
         NAME: ${{ inputs.git-username }}
         POMPATH: ${{ inputs.pom-path }}
-      run: echo "::set-output name=version::$(${{github.action_path}}/version-bump.sh | tail -1)"
+      run: ${{github.action_path}}/version-bump.sh
       shell: bash
-    - name: Output
-      run: "echo 'Version is now ${{ steps.bump-version.outputs.version }}'"
+    - name: Set outputs
+      id: get-outputs
       shell: bash
+      env:
+        POMPATH: ${{ inputs.pom-path }}
+      run: echo "::set-output name=version::$(${{github.action_path}}/get-version.sh)"
+    - name: Result
+      shell: bash
+      run: "echo 'Version is now ${{ steps.get-outputs.outputs.version }}'"
 

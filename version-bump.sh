@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# Directory of this script
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
+
 #
 # Takes a version number, and the mode to bump it, and increments/resets
 # the proper components so that the result is placed in the variable
@@ -32,9 +35,7 @@ function bump {
 # git config --global user.name $NAME
 export GITHUB_TOKEN=$TOKEN
 
-cd $POMPATH
-
-OLD_VERSION=$(cat pom.xml | grep "<version>.*</version>" | head -1 | awk -F'[><]' '{print $3}')
+OLD_VERSION=$($DIR/get-version.sh)
 
 BUMP_MODE="none"
 if git log -1 | grep -q "#major"; then
@@ -49,7 +50,6 @@ if [[ "${BUMP_MODE}" == "none" ]]
 then
   echo "No matching commit tags found."
   echo "pom.xml at" $POMPATH "will remain at" $OLD_VERSION
-  echo $OLD_VERSION
 else
   echo $BUMP_MODE "version bump detected"
   bump $BUMP_MODE $OLD_VERSION
@@ -57,8 +57,7 @@ else
   mvn -q versions:set -DnewVersion="${NEW_VERSION}"
   git add pom.xml
   git commit -m "Bump pom.xml from $OLD_VERSION to $NEW_VERSION"
-  git push -u "https://$GITHUB_ACTOR:$TOKEN@github.com/$GITHUB_REPOSITORY.git"
+  git push
   git tag $NEW_VERSION
   git push --tags
-  echo $NEW_VERSION
 fi
