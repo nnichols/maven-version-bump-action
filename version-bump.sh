@@ -54,7 +54,7 @@ else
   echo $BUMP_MODE "version bump detected"
   bump $BUMP_MODE $OLD_VERSION
   echo "pom.xml at" $POMPATH "will be bumped from" $OLD_VERSION "to" $NEW_VERSION
-  mvn versions:set -DnewVersion="${NEW_VERSION}"
+  mvn -q versions:set -DnewVersion="${NEW_VERSION}"
   git add pom.xml
   git commit -m "Bump pom.xml from $OLD_VERSION to $NEW_VERSION"
   git push -u "https://$GITHUB_ACTOR:$TOKEN@github.com/$GITHUB_REPOSITORY.git"
