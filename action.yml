@@ -25,11 +25,24 @@ inputs:
     required: true
     default: github-actions[bot]
 
+outputs:
+  version:
+    description: 'The current version (whether updated or not)'
+    value: ${{ steps.bump-version.outputs.version }}
+
 runs:
-  using: docker
-  image: Dockerfile
+  using: "composite"
   env:
     TOKEN: ${{ inputs.github-token }}
     EMAIL: ${{ inputs.git-email }}
     NAME: ${{ inputs.git-username }}
     POMPATH: ${{ inputs.pom-path}}
+  steps:
+  - name: Bump Version
+    id: bump-version
+    run: echo "::set-output name=version::$(${{github.action_path}}/version-bump.sh | tail -1)"
+    shell: bash
+  - name: output
+    run: "echo "Version is now ${{ steps.steps.bump-version.outputs.version }}
+    shell: bash
+
