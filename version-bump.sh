@@ -31,9 +31,8 @@ function bump {
     esac
 }
 
-# git config --global user.email $EMAIL
-# git config --global user.name $NAME
-export GITHUB_TOKEN=$TOKEN
+git config --global user.email $GITHUB_EMAIL
+git config --global user.name $GITHUB_USER
 
 OLD_VERSION=$($DIR/get-version.sh)
 
@@ -56,8 +55,10 @@ else
   echo "pom.xml at" $POMPATH "will be bumped from" $OLD_VERSION "to" $NEW_VERSION
   mvn -q versions:set -DnewVersion="${NEW_VERSION}"
   git add pom.xml
+  
+  REPO="https://$GITHUB_ACTOR:$GITHUB_TOKEN@github.com/$GITHUB_REPOSITORY.git"
   git commit -m "Bump pom.xml from $OLD_VERSION to $NEW_VERSION"
-  git push
   git tag $NEW_VERSION
-  git push --tags
+  git push $REPO --follow-tags
+  git push $REPO --tags
 fi
