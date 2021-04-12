@@ -1,0 +1,1 @@
+cat $POMPATH/pom.xml | grep "<version>.*</version>" | head -1 | awk -F'[><]' '{print $3}'
