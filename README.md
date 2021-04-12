@@ -26,7 +26,7 @@ jobs:
 
     - name: Bump Version
       id: bump
-      uses: nnichols/maven-version-bump-action@v2
+      uses: nnichols/maven-version-bump-action@v3
       with:
         github-token: ${{ secrets.github_token }}
 
