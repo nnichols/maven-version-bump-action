@@ -1,1 +1,1 @@
-cat $POMPATH/pom.xml | grep "<version>.*</version>" | head -1 | awk -F'[><]' '{print $3}'
+cd $POMPATH && mvn help:evaluate -Dexpression=project.version -q -DforceStdout
