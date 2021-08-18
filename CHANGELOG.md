@@ -1,5 +1,9 @@
 # Changelog
 
+## v4 - 08/18/2021
+
+- Use `mvn` to detect project version instead of `grep`
+
 ## v3 - 04/10/2021
 
 - Add `version` output
