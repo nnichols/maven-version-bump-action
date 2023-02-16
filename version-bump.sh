@@ -39,9 +39,9 @@ OLD_VERSION=$($DIR/get-version.sh)
 BUMP_MODE="none"
 if git branch == testprod; then
   BUMP_MODE="major"
-elif git log -1 | grep -q "#minor"; then
+elif git branch == testuat; then
   BUMP_MODE="minor"
-elif git log -1 | grep -q "#patch"; then
+elif git branch == bumpversion; then
   BUMP_MODE="patch"
 fi
 
