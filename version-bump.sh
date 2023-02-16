@@ -37,7 +37,7 @@ git config --global user.name $NAME
 OLD_VERSION=$($DIR/get-version.sh)
 
 BUMP_MODE="none"
-if git log -1 | grep -q "#major"; then
+if git branch == testprod; then
   BUMP_MODE="major"
 elif git log -1 | grep -q "#minor"; then
   BUMP_MODE="minor"
