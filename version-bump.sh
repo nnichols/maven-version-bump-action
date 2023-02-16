@@ -18,11 +18,11 @@ function bump {
   case "$1" in
     major)
       local bv=$((parts[0] + 1))
-      NEW_VERSION="${bv}.0.0"
+      NEW_VERSION="${bv}.${parts[1]}.${parts[2]}"
       ;;
     minor)
       local bv=$((parts[1] + 1))
-      NEW_VERSION="${parts[0]}.${bv}.0"
+      NEW_VERSION="${parts[0]}.${bv}.${parts[2]}"
       ;;
     patch)
       local bv=$((parts[2] + 1))
@@ -56,13 +56,13 @@ else
   cd 
   cd /home/tstest/desflow
   mvn -q versions:set -DnewVersion="${NEW_VERSION}"
-  #mvn versions:set -DgenerateBackupPoms=false
   #git add .
   git ls-files --modified | grep pom.xml | xargs git add
   # git ls-files --modified | grep ModuleInfo.java | xargs git add
   REPO="https://$GITHUB_ACTOR:$TOKEN@github.com/$GITHUB_REPOSITORY.git"
   git commit -m "Bump pom.xml from $OLD_VERSION to $NEW_VERSION"
   git tag $NEW_VERSION
+  git push $REPO
   git push $REPO --follow-tags
   git push $REPO --tags
 fi
