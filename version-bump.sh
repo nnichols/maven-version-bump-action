@@ -37,11 +37,11 @@ git config --global user.name $NAME
 OLD_VERSION=$($DIR/get-version.sh)
 
 BUMP_MODE="none"
-if git branch == testprod; then
+if git branch == ns-prod-app; then
   BUMP_MODE="major"
-elif git branch == testuat; then
+elif git branch == ns-uat; then
   BUMP_MODE="minor"
-elif git branch == bumpversion; then
+elif git branch == master; then
   BUMP_MODE="patch"
 fi
 
