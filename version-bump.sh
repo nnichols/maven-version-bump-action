@@ -8,7 +8,7 @@ DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
 # the proper components so that the result is placed in the variable
 # `NEW_VERSION`.
 #
-# $1 = mode (major, minor, patch)
+# $1 = mode (major, minor, patch, release)
 # $2 = version (x.y.z)
 #
 function bump {
@@ -28,6 +28,10 @@ function bump {
       local bv=$((parts[2] + 1))
       NEW_VERSION="${parts[0]}.${parts[1]}.${bv}"
       ;;
+    release)
+      local bv=$((parts[3] + 1))
+      NEW_VERSION="${parts[0]}.${parts[1]}.${parts[2]}.${bv}"
+      ;;
     esac
 }
 
@@ -37,12 +41,16 @@ git config --global user.name $NAME
 OLD_VERSION=$($DIR/get-version.sh)
 
 BUMP_MODE="none"
-if git branch == ns-prod-app; then
-  BUMP_MODE="major"
+if git branch == ns-prod-app ; then
+  if git log -1 | grep -q "Merge"; then
+    BUMP_MODE="major"
+  else
+    BUMP_MODE="patch"
+  fi
 elif git branch == ns-uat; then
   BUMP_MODE="minor"
 elif git branch == master; then
-  BUMP_MODE="patch"
+  BUMP_MODE="release"
 fi
 
 if [[ "${BUMP_MODE}" == "none" ]]
