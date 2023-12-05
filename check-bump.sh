@@ -14,4 +14,4 @@ elif git log -1 | grep -q "#minor"; then
 elif git log -1 | grep -q "#patch"; then
   BUMP_MODE="patch"
 fi
-echo $BUMP_MODE
+echo "$BUMP_MODE"
