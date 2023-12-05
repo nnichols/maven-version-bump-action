@@ -33,6 +33,16 @@ outputs:
 runs:
   using: "composite"
   steps:
+    - name: check bump mode
+      id: check
+      shell: bash
+      env:
+        TOKEN: ${{ inputs.github-token }}
+        EMAIL: ${{ inputs.git-email }}
+        NAME: ${{ inputs.git-username }}
+        POMPATH: ${{ inputs.pom-path }}
+      run: echo "::set-output name=bump-mode::$(${{github.action_path}}/check-bump.sh)"
+
     - name: Bump Version
       env:
         TOKEN: ${{ inputs.github-token }}
@@ -41,12 +51,14 @@ runs:
         POMPATH: ${{ inputs.pom-path }}
       run: ${{github.action_path}}/version-bump.sh
       shell: bash
+
     - name: Set outputs
       id: get-outputs
       shell: bash
       env:
         POMPATH: ${{ inputs.pom-path }}
       run: echo "::set-output name=version::$(${{github.action_path}}/get-version.sh)"
+
     - name: Result
       shell: bash
       run: "echo 'Version is now ${{ steps.get-outputs.outputs.version }}'"
