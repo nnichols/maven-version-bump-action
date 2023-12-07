@@ -35,19 +35,34 @@ git config --global user.email $EMAIL
 git config --global user.name $NAME
 
 OLD_VERSION=$($DIR/get-version.sh)
-
 BUMP_MODE="none"
-if git log -1 | grep -q "#major"; then
+
+if [[ "${TYPE}" == "" ]]
+then
+  if git log -1 | grep -q "#major"; then
   BUMP_MODE="major"
-elif git log -1 | grep -q "#minor"; then
+  elif git log -1 | grep -q "#minor"; then
   BUMP_MODE="minor"
-elif git log -1 | grep -q "#patch"; then
+  elif git log -1 | grep -q "#patch"; then
   BUMP_MODE="patch"
+  fi
+else
+  case "$TYPE" in
+    major)
+      BUMP_MODE="major"
+      ;;
+    minor)
+      BUMP_MODE="minor"
+      ;;
+    patch)
+      BUMP_MODE="patch"
+      ;;
+    esac
 fi
 
 if [[ "${BUMP_MODE}" == "none" ]]
 then
-  echo "No matching commit tags found."
+  echo "No matching commit tags found or no release type set."
   echo "pom.xml at" $POMPATH "will remain at" $OLD_VERSION
 else
   echo $BUMP_MODE "version bump detected"
