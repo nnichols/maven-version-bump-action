@@ -51,7 +51,7 @@ runs:
       shell: bash
       env:
         POMPATH: ${{ inputs.pom-path }}
-      run: echo "::set-output name=version::$(${{github.action_path}}/get-version.sh)"
+      run: echo "version=$(${{github.action_path}}/get-version.sh)" >> $GITHUB_OUTPUT
     - name: Result
       shell: bash
       run: "echo 'Version is now ${{ steps.get-outputs.outputs.version }}'"
